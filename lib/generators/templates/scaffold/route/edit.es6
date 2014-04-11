@@ -2,10 +2,6 @@ export default Ember.Route.extend({
   model: function(params) {
     return this.store.find('<%= require_name.singularize -%>', params.<%= file_name.singularize -%>_id);
   },
-  deactivate: function() {
-    var model = this.get('controller.model');
-    model.rollback();
-  },
   actions: {
     save: function(model) {
       var _this = this;
@@ -15,6 +11,10 @@ export default Ember.Route.extend({
     },
     cancel: function(model) {
       this.transitionTo('<%= file_name.pluralize -%>.show', model);
+    },
+    willTransition: function() {
+      var model = this.get('controller.model');
+      model.rollback();
     }
   }
 });
